@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Service\CollApiService;
+use App\Service\CallApiService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -10,13 +10,17 @@ use Symfony\Component\Routing\Annotation\Route;
 class HomeController extends AbstractController
 {
     /**
-     * @Route("/home", name="home")
+     * @Route("/", name="app_home")
      */
-    public function index(CollApiService $collApiService): Response
+    public function index(CallApiService $callApiService): Response
     {
-        dd($collApiService->getFranceData());
-        return $this->render('home/index.html.twig', [
-            'controller_name' => 'HomeController',
+        $response = $this->render('home/index.html.twig', [
+            'data' => $callApiService->getFranceData(),
+            'departments' => $callApiService->getAllData(),
         ]);
+
+        $response->setSharedMaxAge(3600);
+
+        return $response;
     }
 }
